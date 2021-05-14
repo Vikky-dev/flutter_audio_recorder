@@ -20,7 +20,6 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
-import java.util.List;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -128,6 +127,10 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
       case "delete":
         handleDelete();
         break;
+      case "duration":
+        getDuration();
+        break;
+
       default:
         result.notImplemented();
         break;
@@ -171,12 +174,12 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   }
 
 
-  private int handleDelete() {
+  private void handleDelete() {
     Log.d(LOG_NAME, "Delete method called");
     mDataSize = mDataSizeOnPause.get(mDataSizeOnPause.size() - 2);
     mFileOutputStream = mFileOutputStreamOnPause.get(mFileOutputStreamOnPause.size() - 2);
     Log.d(LOG_NAME, "------------------mDataSize-----------------------"+mDataSize);
-    return getDuration() * 1000;
+    Log.d(LOG_NAME, "------------------mFileOutputStream-----------------------"+mFileOutputStream);
   }
 
 
@@ -433,4 +436,3 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     return (int)duration;
   }
 }
-
