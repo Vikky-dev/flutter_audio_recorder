@@ -165,6 +165,9 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   }
 
   private void handleCurrent(MethodCall call, Result result) {
+    
+    Log.d(LOG_NAME, "handle current method called");
+    
     HashMap<String, Object> currentResult = new HashMap<>();
     currentResult.put("duration", getDuration() * 1000);
     currentResult.put("path", (mStatus == "stopped")? mFilePath : getTempFilename());
@@ -173,7 +176,7 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     currentResult.put("averagePower", mAveragePower);
     currentResult.put("isMeteringEnabled", true);
     currentResult.put("status", mStatus);
-    // Log.d(LOG_NAME, currentResult.toString());
+    Log.d(LOG_NAME, currentResult.toString());
     result.success(currentResult);
   }
 
