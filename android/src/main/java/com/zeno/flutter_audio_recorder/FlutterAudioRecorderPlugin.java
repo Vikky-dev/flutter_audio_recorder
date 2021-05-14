@@ -139,7 +139,8 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
 
   private void getRecDuration(MethodCall call, Result result) {
     int duration = getDuration();
-    result.success(duration);
+    Log.d(LOG_NAME, "Get Duration -----"+duration * 1000);
+    result.success(duration * 1000);
   }
 
   private void handleHasPermission(){
