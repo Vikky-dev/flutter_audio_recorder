@@ -88,6 +88,10 @@ class FlutterAudioRecorder {
   Future start() async {
     return _channel.invokeMethod('start');
   }
+  
+   Future delete() async {
+    return _channel.invokeMethod('delete');
+  }
 
   /// Request currently [Recording] recording to be [Paused]
   /// Note: Use [current] to get latest state of recording after [pause]
