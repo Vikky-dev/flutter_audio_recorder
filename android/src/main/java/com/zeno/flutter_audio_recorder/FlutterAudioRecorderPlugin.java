@@ -260,6 +260,8 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     Log.d(LOG_NAME, "processing the stream: " + mStatus);
     int size = bufferSize;
     byte bData[] = new byte[size];
+    
+     Log.d(LOG_NAME, "what is mDataSize " + mDataSize);
 
     while (mStatus == "recording"){
       Log.d(LOG_NAME, "reading audio data");
