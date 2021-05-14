@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.Build.VERSION;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -18,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.List;
@@ -41,13 +41,14 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   private String mExtension;
   private int bufferSize = 1024;
   private FileOutputStream mFileOutputStream = null;
-  private FileOutputStream mFileOutputStreamOnPause = null;
+  private ArrayList<FileOutputStream> mFileOutputStreamOnPause = new ArrayList<FileOutputStream>();
   private String mStatus = "unset";
   private double mPeakPower = -120;
   private double mAveragePower = -120;
   private Thread mRecordingThread = null;
   private long mDataSize = 0;
-  private long mDataSizeDuringPause = 0;
+  private ArrayList<Long> mDataSizeOnPause = new ArrayList<Long>();
+  //private long [] mDataSizeOnPause;
   private Result _result;
 
 
@@ -172,8 +173,8 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
 
   private void handleDelete() {
     Log.d(LOG_NAME, "Delete method called");
-    mDataSize = mDataSizeDuringPause;
-    mFileOutputStream = mFileOutputStreamOnPause;
+    mDataSize = mDataSizeOnPause.get(mDataSizeOnPause.size() - 2);
+    mFileOutputStream = mFileOutputStreamOnPause.get(mFileOutputStreamOnPause.size() - 2);
     Log.d(LOG_NAME, "------------------mDataSize-----------------------"+mDataSize);
   }
 
@@ -224,19 +225,18 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     mAveragePower = -120;
     mRecorder.stop();
     mRecordingThread = null;
-    mDataSizeDuringPause = mDataSize;
+    mDataSizeOnPause.add(mDataSize);
     mFileOutputStreamOnPause = mFileOutputStream;
 
-    Log.d(LOG_NAME, "------------------mDataSize on pause-----------------------"+mDataSizeDuringPause);
+    Log.d(LOG_NAME, "------------------mDataSize on pause-----------------------"+ mDataSizeOnPause);
     result.success(null);
   }
 
   private void handleResume(MethodCall call, Result result) {
     mStatus = "recording";
-    
+
     Log.d(LOG_NAME, "------------------mDataSize on resume-----------------------"+mDataSize);
-    
-    
+
     mRecorder.startRecording();
     startThread();
     result.success(null);
@@ -432,3 +432,4 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     return (int)duration;
   }
 }
+
