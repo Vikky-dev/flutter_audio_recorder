@@ -182,15 +182,17 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
 
   private void handleDelete(MethodCall call, Result result) {
     Log.d(LOG_NAME, "Delete method called");
-    int durationIndex = mDataSizeOnPause.size() - 2;
-    int fileIndex = mFileOutputStreamOnPause.size() - 2;
-    mDataSize = mDataSizeOnPause.get(durationIndex);
-    mFileOutputStream = mFileOutputStreamOnPause.get(fileIndex);
-    mDataSizeOnPause.remove(durationIndex);
-    mFileOutputStreamOnPause.remove(fileIndex);
+
+    Log.d(LOG_NAME, "Delete method called----------------"+mDataSizeOnPause);
+    int durationIndex = mDataSizeOnPause.size();
+    int fileIndex = mFileOutputStreamOnPause.size();
+    mDataSize = mDataSizeOnPause.get(durationIndex - 2);
+    mFileOutputStream = mFileOutputStreamOnPause.get(fileIndex - 2);
+    mDataSizeOnPause.remove(durationIndex - 1);
+    mFileOutputStreamOnPause.remove(fileIndex - 1);
+    Log.d(LOG_NAME, "Delete method called----------------"+mDataSizeOnPause);
     result.success(null);
   }
-
 
   private void handleCurrent(MethodCall call, Result result) {
     
