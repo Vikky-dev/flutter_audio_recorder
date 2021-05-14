@@ -268,6 +268,14 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
 
   private void handleResume(MethodCall call, Result result) {
     mStatus = "recording";
+
+    try {
+      mFileOutputStream = new FileOutputStream(getTempFilename());
+    } catch (FileNotFoundException e) {
+      result.error("", "cannot find the file", null);
+      return;
+    }
+
     mRecorder.startRecording();
     startThread();
     result.success(null);
