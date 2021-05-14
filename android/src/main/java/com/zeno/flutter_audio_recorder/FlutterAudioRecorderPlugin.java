@@ -226,7 +226,7 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     mRecorder.stop();
     mRecordingThread = null;
     mDataSizeOnPause.add(mDataSize);
-    mFileOutputStreamOnPause = mFileOutputStream;
+    mFileOutputStreamOnPause.add(mFileOutputStream);
 
     Log.d(LOG_NAME, "------------------mDataSize on pause-----------------------"+ mDataSizeOnPause);
     result.success(null);
