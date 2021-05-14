@@ -128,13 +128,18 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
         handleDelete(call, result);
         break;
       case "duration":
-        getDuration();
+        getRecDuration(call, result);
         break;
 
       default:
         result.notImplemented();
         break;
     }
+  }
+
+  private void getRecDuration(MethodCall call, Result result) {
+    int duration = getDuration();
+    result.success(duration);
   }
 
   private void handleHasPermission(){
@@ -436,4 +441,3 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     return (int)duration;
   }
 }
-
