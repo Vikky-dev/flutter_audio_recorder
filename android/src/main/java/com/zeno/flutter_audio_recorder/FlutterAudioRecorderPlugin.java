@@ -184,7 +184,6 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     Log.d(LOG_NAME, "Delete method called");
     mDataSize = mDataSizeOnPause.get(mDataSizeOnPause.size() - 2);
     mFileOutputStream = mFileOutputStreamOnPause.get(mFileOutputStreamOnPause.size() - 2);
-    Log.d(LOG_NAME, "------------------mDataSize-----------------------"+mDataSize);
     result.success(null);
   }
 
@@ -237,16 +236,11 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     mRecordingThread = null;
     mDataSizeOnPause.add(mDataSize);
     mFileOutputStreamOnPause.add(mFileOutputStream);
-
-    Log.d(LOG_NAME, "------------------mDataSize on pause-----------------------"+ mDataSizeOnPause);
     result.success(null);
   }
 
   private void handleResume(MethodCall call, Result result) {
     mStatus = "recording";
-
-    Log.d(LOG_NAME, "------------------mDataSize on resume-----------------------"+mDataSize);
-
     mRecorder.startRecording();
     startThread();
     result.success(null);
@@ -292,8 +286,6 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     Log.d(LOG_NAME, "processing the stream: " + mStatus);
     int size = bufferSize;
     byte bData[] = new byte[size];
-    
-     Log.d(LOG_NAME, "what is mDataSize " + mDataSize);
 
     while (mStatus == "recording"){
       Log.d(LOG_NAME, "reading audio data");
