@@ -185,12 +185,7 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   private void handleDelete(MethodCall call, Result result) {
     Log.d(LOG_NAME, "Delete method called");
 
-    Log.d(LOG_NAME, "Delete method Duration Set----------------"+mDataSizeOnPause);
-
     List<Long> durationList = new ArrayList<>(mDataSizeOnPause);
-
-
-    Log.d(LOG_NAME, "Delete method Duration List----------------"+durationList);
 
     int durationIndex = durationList.size();
 
@@ -201,9 +196,6 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
 
     mDataSizeOnPause.remove(durationList.get(durationIndex - 1));
     mFileOutputStreamOnPause.remove(mFileOutputStreamOnPause.get(mFileOutputStreamOnPause.size() - 1));
-
-
-    Log.d(LOG_NAME, "Delete method called----------------"+mDataSizeOnPause);
     result.success(null);
   }
 
@@ -256,26 +248,11 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     mRecordingThread = null;
     mDataSizeOnPause.add(mDataSize);
     mFileOutputStreamOnPause.add(mFileOutputStream);
-
-    try {
-      mFileOutputStream.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
     result.success(null);
   }
 
   private void handleResume(MethodCall call, Result result) {
     mStatus = "recording";
-
-    try {
-      mFileOutputStream = new FileOutputStream(getTempFilename());
-    } catch (FileNotFoundException e) {
-      result.error("", "cannot find the file", null);
-      return;
-    }
-
     mRecorder.startRecording();
     startThread();
     result.success(null);
