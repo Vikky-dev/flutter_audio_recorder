@@ -94,7 +94,8 @@ class FlutterAudioRecorder {
   }
   
    Future getDuration() async {
-    return _channel.invokeMethod('duration');
+    var result = await _channel.invokeMethod('duration');
+    return new Duration(milliseconds: result);
   }
 
   /// Request currently [Recording] recording to be [Paused]
