@@ -20,6 +20,9 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -40,14 +43,13 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   private String mExtension;
   private int bufferSize = 1024;
   private FileOutputStream mFileOutputStream = null;
-  private ArrayList<FileOutputStream> mFileOutputStreamOnPause = new ArrayList<FileOutputStream>();
+  private HashSet<FileOutputStream> mFileOutputStreamOnPause = new HashSet<FileOutputStream>();
   private String mStatus = "unset";
   private double mPeakPower = -120;
   private double mAveragePower = -120;
   private Thread mRecordingThread = null;
   private long mDataSize = 0;
-  private ArrayList<Long> mDataSizeOnPause = new ArrayList<Long>();
-  //private long [] mDataSizeOnPause;
+  private HashSet<Long> mDataSizeOnPause = new HashSet<Long>();
   private Result _result;
 
 
@@ -201,6 +203,7 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     Log.d(LOG_NAME, "Delete method called----------------"+mDataSizeOnPause);
     result.success(null);
   }
+
 
   private void handleCurrent(MethodCall call, Result result) {
     
