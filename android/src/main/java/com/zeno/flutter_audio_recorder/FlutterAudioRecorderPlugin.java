@@ -43,7 +43,7 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   private String mExtension;
   private int bufferSize = 1024;
   private FileOutputStream mFileOutputStream = null;
-  private HashSet<FileOutputStream> mFileOutputStreamOnPause = new HashSet<FileOutputStream>();
+  private List<FileOutputStream> mFileOutputStreamOnPause = new ArrayList<FileOutputStream>();
   private String mStatus = "unset";
   private double mPeakPower = -120;
   private double mAveragePower = -120;
@@ -182,32 +182,31 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   }
 
 
-private void handleDelete(MethodCall call, Result result) {
+  private void handleDelete(MethodCall call, Result result) {
     Log.d(LOG_NAME, "Delete method called");
 
     Log.d(LOG_NAME, "Delete method Duration Set----------------"+mDataSizeOnPause);
 
     List<Long> durationList = new ArrayList<>(mDataSizeOnPause);
-    List<FileOutputStream> fileList = new ArrayList<>(mFileOutputStreamOnPause);
+
 
     Log.d(LOG_NAME, "Delete method Duration List----------------"+durationList);
 
     int durationIndex = durationList.size();
-    int fileIndex = fileList.size();
 
-    Log.d(LOG_NAME, "Delete method Duration list size----------------"+durationIndex);
-    Log.d(LOG_NAME, "Delete method File list size----------------"+fileIndex);
-    
+
+
     mDataSize = durationList.get(durationIndex - 2);
-    mFileOutputStream = fileList.get(fileIndex - 2);
-    
+    mFileOutputStream = mFileOutputStreamOnPause.get(mFileOutputStreamOnPause.size() - 2);
+
     mDataSizeOnPause.remove(durationList.get(durationIndex - 1));
-    mFileOutputStreamOnPause.remove(fileList.get(fileIndex - 1));
+    mFileOutputStreamOnPause.remove(mFileOutputStreamOnPause.get(mFileOutputStreamOnPause.size() - 1));
 
 
     Log.d(LOG_NAME, "Delete method called----------------"+mDataSizeOnPause);
     result.success(null);
   }
+
 
   private void handleCurrent(MethodCall call, Result result) {
     
@@ -257,6 +256,13 @@ private void handleDelete(MethodCall call, Result result) {
     mRecordingThread = null;
     mDataSizeOnPause.add(mDataSize);
     mFileOutputStreamOnPause.add(mFileOutputStream);
+
+    try {
+      mFileOutputStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     result.success(null);
   }
 
