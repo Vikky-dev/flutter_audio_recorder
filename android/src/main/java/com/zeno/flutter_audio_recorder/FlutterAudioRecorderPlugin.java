@@ -41,11 +41,13 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
   private String mExtension;
   private int bufferSize = 1024;
   private FileOutputStream mFileOutputStream = null;
+  private FileOutputStream mFileOutputStreamOnPause = null;
   private String mStatus = "unset";
   private double mPeakPower = -120;
   private double mAveragePower = -120;
   private Thread mRecordingThread = null;
   private long mDataSize = 0;
+  private long mDataSizeDuringPause = 0;
   private Result _result;
 
 
@@ -122,6 +124,9 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
       case "stop":
         handleStop(call, result);
         break;
+      case "delete":
+        handleDelete();
+        break;
       default:
         result.notImplemented();
         break;
@@ -163,6 +168,15 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     initResult.put("status", mStatus);
     result.success(initResult);
   }
+
+
+  private void handleDelete() {
+    Log.d(LOG_NAME, "Delete method called");
+    mDataSize = mDataSizeDuringPause;
+    mFileOutputStream = mFileOutputStreamOnPause;
+    Log.d(LOG_NAME, "------------------mDataSize-----------------------"+mDataSize);
+  }
+
 
   private void handleCurrent(MethodCall call, Result result) {
     
@@ -210,6 +224,10 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
     mAveragePower = -120;
     mRecorder.stop();
     mRecordingThread = null;
+    mDataSizeDuringPause = mDataSize;
+    mFileOutputStreamOnPause = mFileOutputStream;
+
+    Log.d(LOG_NAME, "------------------mDataSize on pause-----------------------"+mDataSizeDuringPause);
     result.success(null);
   }
 
