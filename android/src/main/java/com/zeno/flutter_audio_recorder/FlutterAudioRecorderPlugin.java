@@ -233,6 +233,10 @@ public class FlutterAudioRecorderPlugin implements MethodCallHandler, PluginRegi
 
   private void handleResume(MethodCall call, Result result) {
     mStatus = "recording";
+    
+    Log.d(LOG_NAME, "------------------mDataSize on resume-----------------------"+mDataSize);
+    
+    
     mRecorder.startRecording();
     startThread();
     result.success(null);
